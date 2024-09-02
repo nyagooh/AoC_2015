@@ -9,7 +9,7 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	if len(args) > 1 {
+	if len(args) > 1 || len(args)<1{
 		return
 	}
 	filename, err := os.Open(args[0])
@@ -23,6 +23,7 @@ func main() {
 		line = append(line, scanner.Text())
 	}
 	fmt.Println(area(line))
+	fmt.Println(area2(line))
 }
 // first step of the questions section
 func area(line []string) int {
@@ -80,3 +81,40 @@ func atoi(a string) int {
 }
 
 // second step of the question
+func area2(line []string) int {
+	//find the shortest path
+	var (
+		length             int
+		width              int
+		height             int
+		splits             []string
+		perimeter          int
+		volume             int
+		Totalribbon        int
+	)
+	for _, ch := range line {
+		splits = strings.Split(ch, "x")
+		if len(splits) != 3 { 
+			fmt.Println("Invalid line format:", ch)
+			continue
+		}
+		length = atoi(splits[0])
+		width =atoi(splits[1])
+		height = atoi(splits[2])
+		volume = length*width*height
+		// find the two shortest paths
+		min1, min2 := length, width
+        if length > width {
+            min1, min2 = width, length
+        }
+		if height < min1 {
+            min1, min2 = height,min1
+        }else if height < min2 {
+			 min2 = height
+		}
+		//perimeter of the smallest dimension
+		perimeter = 2*min1 + 2*min2
+		Totalribbon += volume + perimeter
+	}
+	return Totalribbon
+}
