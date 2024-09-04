@@ -29,6 +29,7 @@ func NiceString(s string) bool {
 	var (
 		count        int
 		founddoubles bool
+		result       bool
 	)
 	vowels := "aeiou"
 	//checks for vowels
@@ -48,37 +49,34 @@ func NiceString(s string) bool {
 	for i := 0; i < len(s)-1; i++ {
 		if s[i] == s[i+1] {
 			founddoubles = true
+			result = true
 			break
 		}
 	}
 	if !founddoubles {
+		result = false
 		return false
 	}
 
 	//checks for invalid string
+	//substring algorithim
 	invalidStrings := []string{"ab", "cd", "pq", "xy"}
 	for _, invalid := range invalidStrings {
 		lenInvalid := len(invalid)
 		for i := 0; i <= len(s)-lenInvalid; i++ {
-			match := false
-			for j := 0; j < lenInvalid; j++ {
-				if s[i+j] == invalid[j] {
-					match = true
-					break
-				}
-			}
-			if match {
-				return false
+			if s[i:i+lenInvalid] == invalid {
+				result = false
+				break
 			}
 		}
-
 	}
-	return true
+	return result
 }
+
 func IsNice(s []string) int {
 	count := 0
-	for _,str :=range s{
-		if NiceString(str){
+	for _, str := range s {
+		if NiceString(str) {
 			count++
 		}
 	}
