@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,20 +21,19 @@ func main() {
 	var line []string
 	for scanner.Scan() {
 		line = append(line, scanner.Text())
-
 	}
-	fmt.Println(IsNice(line))
+
+	fmt.Println(IsNice(line, NiceString))
+	fmt.Println(IsNice(line, NiceStr))
 }
 
 func NiceString(s string) bool {
 	var (
 		count        int
-		founddoubles bool
 		result       bool
+		founddoubles bool
 	)
 	vowels := "aeiou"
-	//checks for vowels
-
 	for _, char := range s {
 		for _, val := range vowels {
 			if string(char) == string(val) {
@@ -42,7 +42,6 @@ func NiceString(s string) bool {
 		}
 	}
 
-	//checks for doubles
 	if count < 3 {
 		return false
 	}
@@ -57,7 +56,6 @@ func NiceString(s string) bool {
 		result = false
 		return false
 	}
-
 	//checks for invalid string
 	//substring algorithim
 	invalidStrings := []string{"ab", "cd", "pq", "xy"}
@@ -73,12 +71,34 @@ func NiceString(s string) bool {
 	return result
 }
 
-func IsNice(s []string) int {
+type Nicechecker func(string) bool
+
+func IsNice(s []string, checker Nicechecker) int {
 	count := 0
 	for _, str := range s {
-		if NiceString(str) {
+		if checker(str) {
 			count++
 		}
 	}
 	return count
+}
+
+// step 2 question
+func NiceStr(s string) bool {
+	var result bool
+	var ok bool
+	for i := 0; i < len(s)-1; i++ {
+		pairs := s[i : i+2]
+		if strings.Contains(s[i+2:], pairs) {
+			result = true
+		}
+	}
+	if result {
+	for i := 0; i < len(s)-2; i++ {
+		if s[i] == s[i+2] {
+			ok = true
+		}
+	}
+}
+return ok
 }
